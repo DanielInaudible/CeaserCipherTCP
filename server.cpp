@@ -31,8 +31,18 @@ int main()
     // recieving data
     char buffer[1024] = { 0 };
     recv(clientSocket, buffer, sizeof(buffer), 0);
-    cout << "Message from client: " << buffer << endl;
 
+    cout << "Encrypted message from client: " << buffer << endl;
+
+    // Encryption / Decryption can be done with same function using modulo
+    for(int i = 0; i < strlen(buffer); i++){
+        buffer[i] = buffer[i] - 13;
+        if(buffer[i] < 33 && buffer[i] != ' '){
+            buffer[i] = 126 - (31 - buffer[i]);
+        } 
+    }
+
+    cout << "Decrypted Message:"  << buffer << endl;
     // closing the socket.
     close(serverSocket);
 

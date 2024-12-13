@@ -8,8 +8,7 @@
 #include <string.h>
 #include <stdio.h>
 
-int main()
-{
+int main(){
     // creating socket
     int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -25,11 +24,19 @@ int main()
     //sending data
     std::string myString;
     std::getline(std::cin, myString);
-    const char* message = myString.c_str();
 
-    std::cout << "Plaintext: " << message << "." << std::endl;
-    std::cout << "Encrypted: " << message << "." << std::endl;
-    std::cout << "Decrypted: " << message << "." << std::endl;
+    for(int i = 0; i < myString.length(); i++){
+        myString[i] = myString[i] + 13;
+        if(myString[i] > 126){
+            myString[i] = 33 + (126 - myString[i]);
+        } 
+    }
+    std::cout << "Encrypted message being sent: " << myString << "." << std::endl;
+
+    // bottom - 33
+    // top - 126
+
+    const char* message = myString.c_str();
 
     send(clientSocket, message, strlen(message),0);
 
@@ -41,26 +48,4 @@ int main()
     close(clientSocket);
 
     return 0;
-}
-
-int rotEncryption(char *stream, int lengthOfMessage ,int toRotate){
-    // bottom - 33
-    // top - 126
-    for(int i = 0; i < lengthOfMessage; i++){
-        stream[i] = stream[i] + toRotate;
-        if(stream[i] > 126){
-            stream[i] = 33 + (126 - stream[i]);
-        } 
-    }
-}
-
-int rotDecryption(char *stream, int lengthOfMessage ,int toRotate){
-    // bottom - 33
-    // top - 126
-    for(int i = 0; i < lengthOfMessage; i++){
-        stream[i] = stream[i] - toRotate;
-        if(stream[i] < 33 ){
-            stream[i] = 126 - (33 - stream[i]);
-        } 
-    }
 }
